@@ -37,7 +37,6 @@ const getpichauAnuncios = async (browser:Browser, input:{search:string}) => {
         let a: HTMLAnchorElement | null
         let b: HTMLImageElement | null
         let c: HTMLDivElement | null
-        
         for(let i=1; i<=10; i++){
             a = document.querySelector(`#__next > main > div:nth-child(2) > div > div > div:nth-child(3) > div:nth-child(${i}) > a`);
             b = document.querySelector(`#__next > main > div:nth-child(2) > div > div > div:nth-child(3) > div:nth-child(${i}) > a > div > div > div > div > img`);

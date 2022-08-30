@@ -1,13 +1,12 @@
-import { Target } from 'puppeteer';
 import React, { useState } from 'react'
 import { trpc } from '../utils/trpc';
 
-interface indexProps {
+interface IndexProps {
 
 }
 
-const index = ({}:indexProps) => {
-    const [Search, setSearch] = useState('rx 6600');
+const Index = ({}:IndexProps) => {
+    const [Search, setSearch] = useState('');
     let MapArray = createMapArray(10);
     const TerabyteAnuncios = trpc.useQuery(['terabyte.getAnuncios',{
         search: Search.trim().replace(' ','+'),
@@ -31,7 +30,6 @@ const index = ({}:indexProps) => {
         TerabyteAnuncios.refetch();
         PichauAnuncios.refetch();
     }
-    console.log(PichauAnuncios)
     return (
         <div className='relative flex flex-col p-5 pt-10'>
             <form className='form-control flex flex-row justify-center pb-5' onSubmit={(e) => handleSubmit(e)}>
@@ -64,8 +62,10 @@ const index = ({}:indexProps) => {
                                     }
                                     return(
                                         <div key={Index} className='flex flex-row max-h-[228px] rounded bg-base-200 m-2'>
-                                            <a href={TerabyteAnuncios.data.hrefArray[IndexArray[Index]]!} target='_blank'>
-                                                <img src={TerabyteAnuncios.data?.imgSrcArray[IndexArray[Index]]!} className='w-[228px] h-[228px] p-2'/>
+                                            <a href={TerabyteAnuncios.data.hrefArray[IndexArray[Index]]!} rel="noreferrer" target='_blank'>
+                                                <picture>
+                                                    <img src={TerabyteAnuncios.data?.imgSrcArray[IndexArray[Index]]!} alt='' className='w-[228px] h-[228px] p-2'/>
+                                                </picture>
                                             </a>
                                             <label className='label label-text-alt justify-evenly flex-col max-w-[150px] py-5'>
                                                 <p>{TerabyteAnuncios.data.titleArray[IndexArray[Index]]}</p>
@@ -98,8 +98,10 @@ const index = ({}:indexProps) => {
                                     }
                                     return(
                                         <div key={Index} className='flex flex-row max-h-[228px] rounded bg-base-200 m-2'>
-                                            <a href={PichauAnuncios.data.hrefArray[IndexArray[Index]]!} target='_blank'>
-                                                <img src={PichauAnuncios.data?.imgSrcArray[IndexArray[Index]]!} className='w-[228px] h-[228px] p-2'/>
+                                            <a href={PichauAnuncios.data.hrefArray[IndexArray[Index]]!} rel="noreferrer" target='_blank'>
+                                                <picture>
+                                                    <img src={PichauAnuncios.data?.imgSrcArray[IndexArray[Index]]!} alt='' className='w-[228px] h-[228px] p-2'/>
+                                                </picture>
                                             </a>
                                             <label className='label label-text-alt justify-evenly flex-col max-w-[150px] py-5'>
                                                 <p>{PichauAnuncios.data.titleArray[IndexArray[Index]]}</p>
@@ -149,4 +151,4 @@ const createMapArray = (SearchLength:number) => {
     return MapArray;
 }
 
-export default index;
+export default Index;
