@@ -1,10 +1,6 @@
 import { z } from 'zod'
 import { createRouter } from '../createRouter'
-import Puppeteer from 'puppeteer-extra'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
-import { Browser } from 'puppeteer'
-
-Puppeteer.use(StealthPlugin())
+import Puppeteer from 'puppeteer'
 
 export const terabyteRouter = createRouter()
     .query('getAnuncios', {
@@ -18,7 +14,7 @@ export const terabyteRouter = createRouter()
         }
     })
 
-const getTerabyteAnuncios = async (browser:Browser, input:{search:string}) => {
+const getTerabyteAnuncios = async (browser:Puppeteer.Browser, input:{search:string}) => {
     const page = await browser.newPage();
     page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36');
     await page.goto(`https://www.terabyteshop.com.br/busca?str=${input.search}`,{

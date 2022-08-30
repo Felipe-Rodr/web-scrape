@@ -1,11 +1,7 @@
 import { z } from 'zod'
 import { createRouter } from '../createRouter'
-import Puppeteer from 'puppeteer-extra'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
-import { Browser } from 'puppeteer'
+import Puppeteer from 'puppeteer'
 import { scrollPageToBottom } from 'puppeteer-autoscroll-down'
-
-Puppeteer.use(StealthPlugin())
 
 export const pichauRouter = createRouter()
     .query('getAnuncios', {
@@ -19,7 +15,7 @@ export const pichauRouter = createRouter()
         }
     })
 
-const getpichauAnuncios = async (browser:Browser, input:{search:string}) => {
+const getpichauAnuncios = async (browser:Puppeteer.Browser, input:{search:string}) => {
     const page = await browser.newPage();
     page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36');
     await page.goto(`https://www.pichau.com.br/search?q=${input.search}`,{
