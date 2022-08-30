@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { createRouter } from '../createRouter'
-import Puppeteer from 'puppeteer'
+import chrome from 'chrome-aws-lambda'
+import Puppeteer from 'puppeteer-core';
 
 export const terabyteRouter = createRouter()
     .query('getAnuncios', {
@@ -8,7 +9,18 @@ export const terabyteRouter = createRouter()
             search: z.string(),
         }),
         async resolve({input}){
-            const browser = await Puppeteer.launch({defaultViewport:null});
+            const options = process.env.AWS_REGION ? {
+                args: chrome.args,
+                executablePath: await chrome.executablePath,
+                headless: chrome.headless
+            } : {
+                args: [],
+                executablePath:
+                    process.platform === 'win32' ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' : 
+                    process.platform === 'linux' ? '/usr/bin/google-chrome' : 
+                    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+            };
+            const browser = await Puppeteer.launch(options);
             const terabyteAnuncios = await getTerabyteAnuncios(browser, input);
             return terabyteAnuncios
         }
