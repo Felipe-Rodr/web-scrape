@@ -2,9 +2,6 @@ import { z } from 'zod'
 import { createRouter } from '../createRouter'
 import chrome from 'chrome-aws-lambda'
 import Puppeteer from 'puppeteer-core';
-import { scrollPageToBottom } from 'puppeteer-autoscroll-down'
-
-
 
 export const pichauRouter = createRouter()
     .query('getAnuncios', {
@@ -35,10 +32,7 @@ const getpichauAnuncios = async (browser:Puppeteer.Browser, input:{search:string
     await page.goto(`https://www.pichau.com.br/search?q=${input.search}`,{
         waitUntil:'load'
     });
-    await page.evaluate(() => {
-        window.scrollTo(0, 0);
-    });
-    await scrollPageToBottom(page,{});
+    await autoScroll(page);
     const pichauAnuncios = await page.evaluate(() => {
         const titleArray = []
         const precoArray = []
@@ -61,4 +55,23 @@ const getpichauAnuncios = async (browser:Puppeteer.Browser, input:{search:string
     await page.close();
     await browser.close();
     return pichauAnuncios;
+}
+
+async function autoScroll(page:Puppeteer.Page){
+    await page.evaluate(async () => {
+        await new Promise<void>((resolve, reject) => {
+            var totalHeight = 0;
+            var distance = 100;
+            var timer = setInterval(() => {
+                var scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+
+                if(totalHeight >= scrollHeight - window.innerHeight){
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 100);
+        });
+    });
 }
