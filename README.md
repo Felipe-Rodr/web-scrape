@@ -3,6 +3,7 @@
     <li> Typescript</li>
     <li> React</li>
     <li> Trpc</li>
+    <li> Puppeteer node package </li>
 </ul>
 <h3> Passos para a utilização do app: </h3>
 <ul>
